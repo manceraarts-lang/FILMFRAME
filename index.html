@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Filmframe 2D Animation · 1.1.12</title>
+<title>Filmframe 2D Animation · 1.1.18</title>
 <meta name="application-name" content="Filmframe 2D Animation">
-<meta name="version" content="1.1.12">
+<meta name="version" content="1.1.18">
 <style>
 :root{--bg:#e4e6ea;--panel:#f6f7f9;--line:#d3d6dc;--text:#23262d;--muted:#6b717d;--rail:#2b2d33;--railI:#c9ccd4;--accent:#e0912a;--on:#fff;--stage:#d6d9df;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -26,7 +26,7 @@ body.r #rail{left:auto;right:10px}
 .dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--railI)}
 .fly{position:absolute;top:50%;transform:translateY(-50%);left:74px;width:228px;max-width:calc(100% - 90px);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;display:none;box-shadow:0 8px 28px rgba(0,0,0,.2)}
 body.r .fly{left:auto;right:74px}
-.fly.show{display:block}
+.fly.show{display:block;max-height:calc(100% - 24px);overflow-y:auto;overscroll-behavior:contain}
 .fly{max-height:calc(100% - 24px);overflow-y:auto}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .chip{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:7px 11px;font-size:13px}
@@ -68,10 +68,10 @@ input[type=color]{width:100%;height:36px;border:1px solid var(--line);border-rad
 .lb button{border:0;background:none;padding:2px;font-size:12px;color:var(--muted)}
 .lb .nm{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);border-radius:6px;padding:4px}
 .lb .nm.on{background:var(--accent);color:var(--on)}
-.hd{flex:0 0 44px;width:44px;border:2px solid transparent;border-radius:6px;font-size:10px;color:var(--muted);touch-action:none;padding:0;background:none}
+.hd{flex:0 0 var(--tl-cell,44px);width:var(--tl-cell,44px);border:2px solid transparent;border-radius:6px;font-size:10px;color:var(--muted);touch-action:none;padding:0;background:none}
 .hd canvas{display:block;width:100%;height:22px;background:#fff;border-radius:3px}
 .hd.on{border-color:var(--accent)}.hd.sel{background:var(--accent);color:var(--on)}.hd.tg2{outline:2px dashed var(--accent)}
-.ce{flex:0 0 44px;height:26px;border:1px solid var(--line);border-radius:5px;background:var(--bg);padding:0;position:relative}
+.ce{flex:0 0 var(--tl-cell,44px);height:26px;border:1px solid var(--line);border-radius:5px;background:var(--bg);padding:0;position:relative}
 .ce.k::after{content:"";position:absolute;left:6px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--text)}
 .ce.h{background:var(--line)}.ce.cu{outline:2px solid var(--accent)}.ce.off{opacity:.4}
 #tools,#ltools{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:6px}
@@ -83,6 +83,7 @@ input[type=color]{width:100%;height:36px;border:1px solid var(--line);border-rad
 .sw2{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);padding:0}
 button{transition:transform .08s,opacity .08s}.pill:active,.ic:active,.chip:active,.ce:active{transform:scale(.92);opacity:.8}
 #ltools select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:4px;font-size:12px}
+#tlzoom{display:flex;align-items:center;gap:6px;padding:3px 2px 6px;position:sticky;left:0;z-index:5;background:var(--panel);width:max-content;min-width:100%;box-sizing:border-box;color:var(--muted);font-size:11px}#tlzoom input{width:clamp(84px,22vw,150px);height:22px;accent-color:var(--accent)}#tlzoom .pill{height:26px;min-width:26px;padding:0 7px}#tlzv{min-width:38px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text)}
 .ce.mk{border-color:#8a5cf6}.gn{font-weight:600}.sw3{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);padding:0;margin:2px}
 #ltools.cl .sec{display:none}
 /* ===== 1.1.7 timeline: dock + pestaña de opciones ===== */
@@ -227,7 +228,46 @@ body.r #tl{left:50%;right:auto}
 }
 #tl.preview-adjusting #tools .pill{background:rgba(43,45,53,.52)}
 #tl.preview-adjusting #tlh i{background:rgba(190,192,202,.72)}
+
+/* 1.1.17 · Refactor visual de navegación y paneles */
+#rail{gap:5px;padding:9px;max-height:88vh;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin}
+.rail-separator{height:1px;flex:0 0 1px;background:rgba(255,255,255,.2);margin:5px 5px}
+.fly{width:286px;padding:15px;max-width:calc(100vw - 94px);border-radius:16px}
+.fly h3{font-size:15px;letter-spacing:.01em;margin:2px 0 12px}
+.fly .ui-subtitle{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:10px 0 7px}
+.fly .ui-section{border:1px solid var(--line);border-radius:12px;margin:9px 0;background:color-mix(in srgb,var(--panel) 94%,var(--bg));overflow:hidden}
+.fly .ui-section>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;font-size:12px;font-weight:650;cursor:pointer;user-select:none}
+.fly .ui-section>summary::-webkit-details-marker{display:none}
+.fly .ui-section>summary:after{content:'＋';color:var(--muted);font-size:13px}
+.fly .ui-section[open]>summary:after{content:'−'}
+.fly .ui-section-body{padding:2px 12px 11px}
+.fly .ui-section-body>.f:last-child{margin-bottom:2px}
+.fly .ui-hint{font-size:11px;line-height:1.45;color:var(--muted);margin:-3px 0 9px}
+.brush-library{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:12px}
+.brush-library .chip{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0}
+.fly .f{margin:9px 0}
+.fly input[type=range]{width:100%;accent-color:var(--accent)}
+.fly input[type=text],.fly select{width:100%;min-width:0}
+#sheet{max-width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain}
+#sheet h3{position:sticky;top:-1px;background:var(--panel);z-index:2;padding:5px 0 10px;margin:0 0 8px}
+#sheet h4{margin:17px 0 8px;padding-top:10px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.03em}
+#tools{gap:6px}
+.tool-divider{margin:0 5px}
+@media(max-width:600px){
+  #rail{left:6px;padding:6px;border-radius:17px}
+  body.r #rail{right:6px}
+  .ic{width:40px;height:40px;border-radius:12px}
+  .fly{width:min(310px,calc(100vw - 78px));max-width:calc(100vw - 78px);padding:12px}
+  body.r .fly{right:58px}
+  #stage{padding-left:58px;padding-right:58px}
+  body.r #stage{padding-left:58px;padding-right:58px}
+  #bar{gap:4px}
+  #bar .pill{min-width:34px;padding-left:8px;padding-right:8px}
+}
+@media(min-width:900px){.fly{width:340px}}
+
 </style>
+<meta name="filmframe-release-notes" content="1.1.18: refactor interno de arquitectura y documentación de módulos, con orden de dependencias explícito; sin cambios intencionales de comportamiento ni de almacenamiento. Base 1.1.17 UI Refactor.">
 </head>
 <body>
 <div id="stage"><canvas id="view"></canvas></div>
@@ -235,7 +275,7 @@ body.r #tl{left:50%;right:auto}
 <div class="fly" id="fly"></div>
 <div id="tl">
 <div id="tlh" role="button" aria-label="Mostrar u ocultar la línea de tiempo"><i></i></div>
-<div id="tlin"><div id="strip"></div><div id="tools" aria-label="Acciones contextuales de cuadro y capa">
+<div id="tlin"><div id="tlzoom" aria-label="Zoom de la línea de tiempo"><span>Zoom</span><button type="button" class="pill sm" id="tlzout" aria-label="Alejar la línea de tiempo" title="Alejar">−</button><input id="tlz" type="range" min="32" max="76" step="2" value="44" aria-label="Nivel de zoom de la línea de tiempo"><button type="button" class="pill sm" id="tlzin" aria-label="Acercar la línea de tiempo" title="Acercar">+</button><output id="tlzv">100%</output></div><div id="strip"></div><div id="tools" aria-label="Acciones contextuales de cuadro y capa">
 <button class="pill sm primary-action" id="dup" title="Duplicar cuadro o rango">Duplicar</button><button class="pill sm" id="hp" title="Aumentar duración del cuadro">Hold +</button><button class="pill sm" id="hm" title="Reducir duración del cuadro">Hold −</button><button class="pill sm" id="rg" title="Seleccionar un rango de cuadros">Rango</button><button class="pill sm danger-action" id="del" title="Borrar cuadro o rango">Borrar</button>
 <span class="tool-divider" aria-hidden="true"></span>
 <button class="pill sm layer-action" id="la" title="Crear capa">+ Capa</button><button class="pill sm layer-action" id="lc" title="Duplicar capa">Duplicar capa</button><button class="pill sm layer-action" id="ln" title="Cambiar nombre de capa">Nombre</button><button class="pill sm layer-action icon-action" id="lu" aria-label="Subir capa" title="Subir capa">▲</button><button class="pill sm layer-action icon-action" id="ld" aria-label="Bajar capa" title="Bajar capa">▼</button><button class="pill sm layer-action" id="lm" title="Fusionar con la capa inferior">Fusionar ↓</button><button class="pill sm layer-action danger-action" id="lx" title="Borrar capa">Borrar capa</button><button id="tla" class="pill sm layer-action" aria-label="Mostrar opciones avanzadas de capa" aria-expanded="false" title="Más opciones de capa">Más opciones ▾</button>
@@ -260,8 +300,44 @@ body.r #tl{left:50%;right:auto}
 </div>
 <div id="ov"><div class="sheet" id="sheet"></div></div>
 
-<script>
-const APP={name:'Filmframe 2D Animation',version:'1.1.12'};
+<!--
+FILMFRAME 1.1.18 — MAPA DE ARQUITECTURA
+Base: 1.1.17 UI Refactor. Este documento conserva el empaquetado HTML autónomo.
+
+Módulos (orden de ejecución obligatorio; comparten el ámbito léxico clásico):
+  00 app-shell       Estado global, persistencia de preferencias, canvas, entrada,
+                     navegación, pinceles base, gestos y configuración.
+  01 animation-core Fotogramas/celdas, capas, composición, timeline, historial,
+                     persistencia de celdas y exportación GIF/PNG.
+  02 tools-projects Herramientas de selección/relleno, proyectos, audio base y
+                     operaciones de importación/exportación de proyectos.
+  03 playback-cache Reproducción, caché de previsualización, cola de render y
+                     coordinación de rendimiento.
+  04 audio-video    Motor de audio, mezcla, captura de vídeo y rotoscopia.
+  05 drawing-advanced Motor de trazos, presión, estabilización, color, selección
+                     avanzada y transformación.
+  06 advanced-tools Historial ampliado, guías, texto, formatos PSD/TIFF, timeline
+                     avanzado y administración de memoria.
+  07 timeline-dock  Presentación y controles del dock de timeline.
+  08 updater        Consulta y presentación de actualizaciones.
+  09 timeline-zoom  Zoom horizontal de timeline.
+
+Contrato de integración:
+  - Los scripts 00–06 comparten variables y funciones globales léxicas; no envolverlos
+    individualmente en IIFE ni convertirlos a módulos ES sin migrar sus dependencias.
+  - 07–09 mantienen su aislamiento local y usan únicamente los puentes globales
+    explícitos que ya existían.
+  - STORE y los nombres de IndexedDB/localStorage son identificadores persistentes:
+    no renombrar ni cambiar esquemas sin migración versionada.
+  - Mantener el orden de scripts y los IDs del DOM: existen enlaces por selector,
+    atributos data-* y asignaciones de eventos distribuidas entre módulos.
+
+Alcance 1.1.18: formalización de límites, nombres y dependencias; actualización de
+metadatos. No se reescriben algoritmos ni se altera el contrato de datos. La separación
+física en archivos ES modules queda aplazada hasta disponer de pruebas de regresión.
+-->
+<script data-ff-module="app-shell" data-ff-order="00">
+const APP={name:'Filmframe 2D Animation',version:'1.1.18'};
 // Claves de almacenamiento: NO cambiar (compatibilidad con proyectos guardados)
 const STORE={cfg:'anim-v2',frames:'anim-v2-frames',projects:'anim-projects',cache:'anim-cache',errors:'anim-errors'};
 const $=s=>document.querySelector(s);
@@ -297,10 +373,17 @@ $('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
 function svg(d){return '<svg viewBox="0 0 24 24"><path d="'+d+'"/></svg>'}
 function rail(){
   const r=$('#rail');r.innerHTML='';
-  ['pen','era','fil','sel','eye','txt','gd','col','oni','und','tl'].filter(id=>S.tools[id]).concat('set').forEach(id=>{
-    const b=document.createElement('button');b.className='ic'+(id===tool?' on':'');b.setAttribute('aria-label',NAMES[id]||'Ajustes');b.title=NAMES[id]||'Ajustes';
-    b.innerHTML=id==='col'?'<span class="dot" style="background:'+S.pal[ci]+'"></span>':svg(IC[id]);
-    b.onclick=()=>tap(id);r.appendChild(b)});
+  const groups=[{label:'Dibujo',ids:['pen','era','fil','sel','eye','txt','gd']},{label:'Color',ids:['col']},{label:'Animación',ids:['oni','und','tl']},{label:'Sistema',ids:['set']}];
+  groups.forEach((group,gi)=>{
+    const visible=group.ids.filter(id=>id==='set'||S.tools[id]);
+    if(!visible.length)return;
+    if(gi){const sep=document.createElement('div');sep.className='rail-separator';sep.setAttribute('aria-hidden','true');r.appendChild(sep)}
+    visible.forEach(id=>{
+      const b=document.createElement('button');b.className='ic'+(id===tool?' on':'');b.setAttribute('aria-label',NAMES[id]||'Ajustes');b.title=group.label+' · '+(NAMES[id]||'Ajustes');
+      b.innerHTML=id==='col'?'<span class="dot" style="background:'+S.pal[ci]+'"></span>':svg(IC[id]);
+      b.onclick=()=>tap(id);r.appendChild(b)
+    })
+  });
   document.body.classList.toggle('r',S.side==='right');
 }
 function tap(id){
@@ -338,18 +421,30 @@ function sprite(col,hard,d,era){const k=col+hard+'|'+d+era;let c=SPR.get(k);if(c
 function seg(a,b,e){
   const x=cv(1).getContext('2d'),era=tool==='era',B=era?{size:S.sz.era,op:100,hard:80,sp:6,grain:0,scat:0,ps:0,po:0}:S.brushes[S.bi],
   pen=e.pointerType==='pen'&&S.press,p=pen?prs(e):.5,
-  dia=Math.max(1,B.size*(W/1000)*(B.ps&&pen?.2+p*1.6:1)*dynK(e)),step=Math.max(1,B.sp/100*dia),
-  sp=(B.tip&&tipOf(B))?tipSprite(B,S.pal[ci],Math.round(dia),era):sprite(S.pal[ci],B.hard,Math.round(dia),era),al=B.op/100*(B.po&&pen?.3+p*.7:1),
-  dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),rot=(B.tip&&(B.ang||B.fol)?((B.fol&&dist?Math.atan2(dy,dx):0)+(B.ang||0)*Math.PI/180):0)+(B.tip?tiltRot(e):0);
-  bbAdd(a,b,dia*(1+(B.scat||0)/25)+4);if(alk()&&era)return;x.globalCompositeOperation=alk()?'source-atop':era?'destination-out':'source-over';x.imageSmoothingEnabled=true;x.imageSmoothingQuality=S.perf?'low':'high';
-  let need=Math.max(0,step-acc),s=0;
-  while(s+need<=dist){s+=need;const f=dist?s/dist:0;let px=a.x+dx*f,py=a.y+dy*f;
-    if(B.scat){px+=(Math.random()-.5)*B.scat/50*dia;py+=(Math.random()-.5)*B.scat/50*dia}
-    x.globalAlpha=B.grain?al*(1-B.grain/100*Math.random()):al;
-    if(B.sm){if(pd){const d=Math.max(2,Math.round(dia)),sg=(smt.width=smt.height=d,smt.getContext('2d'));sg.drawImage(cv(1),pd.x-d/2,pd.y-d/2,d,d,0,0,d,d);sg.globalCompositeOperation='destination-in';sg.drawImage(sprite('#000000',B.hard,d,false),0,0);x.globalAlpha=B.op/100;x.drawImage(smt,px-d/2,py-d/2)}pd={x:px,y:py}}
+  baseDia=Math.max(1,B.size*(W/1000)*(B.ps&&pen?.2+p*1.6:1)*dynK(e)),
+  stepBase=Math.max(1,B.sp/100*baseDia),dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy),
+  baseRot=(B.tip&&(B.ang||B.fol)?((B.fol&&dist?Math.atan2(dy,dx):0)+(B.ang||0)*Math.PI/180):0)+(B.tip?tiltRot(e):0);
+  bbAdd(a,b,baseDia*(1+(B.scat||0)/25+(B.jz||0)/100)+4);if(alk()&&era)return;
+  x.globalCompositeOperation=alk()?'source-atop':era?'destination-out':'source-over';x.imageSmoothingEnabled=true;x.imageSmoothingQuality=S.perf?'low':'high';
+  let need=Math.max(0,stepBase-acc),s=0;
+  while(s+need<=dist){
+    s+=need;const f=dist?s/dist:0;let px=a.x+dx*f,py=a.y+dy*f;
+    const sizeJ=1+(Math.random()-.5)*(B.jz||0)/100;
+    const dia=Math.max(1,baseDia*sizeJ),step=Math.max(1,stepBase*(1+(Math.random()-.5)*(B.js||0)/100));
+    if(B.scat){px+=(Math.random()-.5)*B.scat/50*baseDia;py+=(Math.random()-.5)*B.scat/50*baseDia}
+    const opJ=Math.max(0,1+(Math.random()-.5)*(B.jo||0)/100);
+    const pressureOpacity=B.po&&pen?(1-(1-p)*(B.poAmt==null?70:B.poAmt)/100):1;
+    const alpha=Math.max(0,Math.min(1,B.op/100*pressureOpacity*opJ));
+    const d=Math.max(2,Math.round(dia));
+    let sp=(B.tip&&tipOf(B))?tipSprite(B,S.pal[ci],d,era):sprite(S.pal[ci],B.hard,d,era);
+    if(B.grainTip&&grainOf(B))sp=grainSprite(B,S.pal[ci],d,era,sp);
+    const rot=baseRot+(Math.random()-.5)*(B.jr||0)*Math.PI/180;
+    x.globalAlpha=B.grain?alpha*(1-B.grain/100*Math.random()):alpha;
+    if(B.sm){if(pd){const sg=(smt.width=smt.height=d,smt.getContext('2d'));sg.drawImage(cv(1),pd.x-d/2,pd.y-d/2,d,d,0,0,d,d);sg.globalCompositeOperation='destination-in';sg.drawImage(sprite('#000000',B.hard,d,false),0,0);x.globalAlpha=alpha;x.drawImage(smt,px-d/2,py-d/2)}pd={x:px,y:py}}
     else if(rot){x.save();x.translate(px,py);x.rotate(rot);x.drawImage(sp,-sp.width/2,-sp.height/2);x.restore()}
     else x.drawImage(sp,px-sp.width/2,py-sp.height/2);
-    acc=0;need=step}
+    acc=0;need=step;
+  }
   acc+=dist-s;x.globalAlpha=1;x.globalCompositeOperation='source-over';requestAnimationFrame(render)}
 const BP=[['size','Tamaño',1,120],['op','Opacidad',1,100],['hard','Dureza',0,100],['sp','Espaciado',1,100],['grain','Grano',0,100],['scat','Dispersión',0,100]];
 let pd=null;const smt=document.createElement('canvas'),TIPS=new Map();let tid=0;
@@ -357,20 +452,40 @@ const GR=['Lápices','Tintas','Acrílicos','Acuarelas','Secos','Sintéticos','Ae
 const GM={'Lápiz':'Lápices','Boceto':'Lápices','Lápiz de color':'Lápices','Tinta':'Tintas','Fineliner':'Tintas','Pincel tinta':'Tintas','Marcador':'Sintéticos','Aerógrafo':'Aerógrafo','Spray':'Aerógrafo','Carbón':'Secos','Tiza':'Secos','Pastel':'Secos','Acuarela':'Acuarelas','Gouache':'Acrílicos','Acrílico':'Acrílicos','Difuminar':'Difuminado'};
 let gSel=null;const grp=b=>b.g||GM[b.n]||'Mis pinceles';
 function tipOf(b){return b.tip&&TIPS.get(b.tip)}
+const GRAINS=new Map(),GSPR=new Map();let gid=0;
+function grainOf(b){return b.grainTip&&GRAINS.get(b.grainTip)}
+function loadGrain(url,cb){if(GRAINS.has(url)){cb&&cb();return}const im=new Image();im.onload=()=>{GRAINS.set(url,{im,id:++gid});cb&&cb()};im.src=url}
+function grainSprite(b,col,d,era,base){
+  const gr=grainOf(b);if(!gr)return base;const key='g'+gr.id+'|'+col+'|'+d+'|'+era+'|'+(b.gd==null?55:b.gd);
+  let c=GSPR.get(key);if(c)return c;if(GSPR.size>160)GSPR.clear();
+  c=document.createElement('canvas');c.width=c.height=d;const g=c.getContext('2d');
+  g.drawImage(base,0,0,d,d);g.globalCompositeOperation='multiply';
+  g.globalAlpha=Math.max(0,Math.min(1,(b.gd==null?55:b.gd)/100));
+  const im=gr.im,s=Math.max(d/im.width,d/im.height),w=im.width*s,h=im.height*s;
+  g.drawImage(im,(d-w)/2,(d-h)/2,w,h);g.globalAlpha=1;g.globalCompositeOperation='source-over';
+  GSPR.set(key,c);return c;
+}
 function loadTip(url,cb){if(TIPS.has(url)){cb&&cb();return}const im=new Image();im.onload=()=>{TIPS.set(url,{im,id:++tid});cb&&cb()};im.src=url}
 function tipSprite(b,col,d,era){const t=tipOf(b);d=Math.max(2,d);const k=t.id+col+d+era+(S.perf?'q1':'q0');let c=SPR.get(k);if(c)return c;if(SPR.size>300)SPR.clear();
   c=document.createElement('canvas');c.width=c.height=d;const g=c.getContext('2d');g.imageSmoothingQuality=S.perf?'low':'high';
   const s=d/Math.max(t.im.width,t.im.height),w=t.im.width*s,h=t.im.height*s;g.drawImage(t.im,(d-w)/2,(d-h)/2,w,h);
   g.globalCompositeOperation='source-in';g.fillStyle=era?'#000':col;g.fillRect(0,0,d,d);SPR.set(k,c);return c}
 function brushHTML(){const B=S.brushes[S.bi],g=gSel||grp(B),has=GR.filter(x=>x===g||S.brushes.some(b=>grp(b)===x));
-  return '<h3>Pincel</h3><div class="chips">'+has.map(x=>'<button class="chip'+(x===g?' on':'')+'" data-g="'+x+'">'+x+'</button>').join('')+'</div><div class="chips">'+S.brushes.map((b,i)=>grp(b)===g?'<button class="chip'+(i===S.bi?' on':'')+'" data-b="'+i+'">'+b.n+'</button>':'').join('')+'</div>'+
-  '<label class="f">Nombre<input id="bn" type="text" value="'+B.n+'"></label>'+
-  '<label class="f">Grupo<select id="bg">'+GR.map(x=>'<option'+(x===grp(B)?' selected':'')+'>'+x+'</option>').join('')+'</select></label>'+
-  '<label class="f">Forma de punta: PNG con fondo transparente, máx. 1080×1080<input id="tipf" type="file" accept="image/png"></label><div id="tipm" style="font-size:12px;color:var(--muted);margin:-6px 0 10px">'+(B.tip?'Forma personalizada activa':'Punta redonda')+'</div>'+
+  const val=k=>B[k]==null?(k==='poAmt'?70:0):B[k];
+  const range=p=>'<label class="f">'+p[1]+': <b id="v_'+p[0]+'">'+val(p[0])+'</b><input type="range" data-p="'+p[0]+'" min="'+p[2]+'" max="'+p[3]+'" value="'+val(p[0])+'"></label>';
+  return '<h3>Biblioteca de pinceles</h3><div class="ui-subtitle">Categorías</div><div class="chips">'+has.map(x=>'<button class="chip'+(x===g?' on':'')+'" data-g="'+x+'">'+x+'</button>').join('')+'</div><div class="brush-library">'+S.brushes.map((b,i)=>grp(b)===g?'<button class="chip'+(i===S.bi?' on':'')+'" data-b="'+i+'">'+b.n+'</button>':'').join('')+'</div>'+
+  '<details class="ui-section" open><summary>Identidad y trazo</summary><div class="ui-section-body">'+
+  '<label class="f">Nombre<input id="bn" type="text" value="'+B.n+'"></label><label class="f">Categoría<select id="bg">'+GR.map(x=>'<option'+(x===grp(B)?' selected':'')+'>'+x+'</option>').join('')+'</select></label>'+
+  BP.map(range).join('')+'</div></details>'+
+  '<details class="ui-section"><summary>Presión y respuesta</summary><div class="ui-section-body">'+
+  '<label class="row">La presión modifica el tamaño<input type="checkbox" data-c="ps"'+(B.ps?' checked':'')+'></label><label class="row">La presión modifica la opacidad<input type="checkbox" data-c="po"'+(B.po?' checked':'')+'></label>'+
+  '<div class="ui-subtitle">Variación por sello</div>'+[['jz','Variación de tamaño',0,100],['jo','Variación de opacidad',0,100],['jr','Variación de rotación',0,180],['js','Variación de espaciado',0,100],['poAmt','Respuesta de opacidad a presión',0,100]].map(range).join('')+'</div></details>'+
+  '<details class="ui-section"><summary>Punta y textura</summary><div class="ui-section-body">'+
+  '<label class="f">Forma de punta · PNG transparente, máximo 1080 × 1080<input id="tipf" type="file" accept="image/png"></label><div id="tipm" class="ui-hint">'+(B.tip?'Forma personalizada activa':'Punta redonda predeterminada')+'</div>'+
   (B.tip?'<div class="chips"><button class="chip" id="tipx">Quitar forma</button></div><label class="f">Ángulo: <b id="v_ang">'+(B.ang||0)+'</b>°<input type="range" data-p="ang" min="0" max="359" value="'+(B.ang||0)+'"></label><label class="row">Gira con el trazo<input type="checkbox" data-c="fol"'+(B.fol?' checked':'')+'></label>':'')+
-  BP.map(p=>'<label class="f">'+p[1]+': <b id="v_'+p[0]+'">'+B[p[0]]+'</b><input type="range" data-p="'+p[0]+'" min="'+p[2]+'" max="'+p[3]+'" value="'+B[p[0]]+'"></label>').join('')+
-  '<label class="row">Presión cambia el tamaño<input type="checkbox" data-c="ps"'+(B.ps?' checked':'')+'></label><label class="row">Presión cambia la opacidad<input type="checkbox" data-c="po"'+(B.po?' checked':'')+'></label>'+
-  '<div class="chips"><button class="chip" id="bdup">Duplicar</button>'+(S.brushes.length>1?'<button class="chip" id="bdel">Eliminar</button>':'')+'</div>'}
+  '<label class="f">Textura de grano · PNG<input id="grainf" type="file" accept="image/png"></label><div id="grainm" class="ui-hint">'+(B.grainTip?'Textura personalizada activa':'Sin textura personalizada')+'</div>'+
+  (B.grainTip?'<div class="chips"><button class="chip" id="grainx">Quitar textura</button></div>':'')+range(['gd','Profundidad de textura',0,100])+'</div></details>'+
+  '<details class="ui-section"><summary>Acciones del pincel</summary><div class="ui-section-body"><div class="chips"><button class="chip" id="bdup">Duplicar</button><button class="chip" id="bpro">Crear perfil Brush Pen</button>'+(S.brushes.length>1?'<button class="chip" id="bdel">Eliminar</button>':'')+'</div></div></details>'}
 function wireBrush(){
   const B=()=>S.brushes[S.bi],re=()=>{fly.innerHTML=brushHTML();wireBrush()};
   fly.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{gSel=b.dataset.g;re()});
@@ -382,16 +497,21 @@ function wireBrush(){
   $('#bdup').onclick=()=>{S.brushes.push({...B(),n:B().n+' copia',g:grp(B())});S.bi=S.brushes.length-1;save();re()};
   const d=$('#bdel');if(d)d.onclick=()=>{S.brushes.splice(S.bi,1);S.bi=Math.max(0,S.bi-1);save();re()};
   const tx=$('#tipx');if(tx)tx.onclick=()=>{delete B().tip;save();re()};
-  $('#tipf').onchange=e=>{const f=e.target.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{
-    const m=Math.min(1,1080/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*m);c.height=Math.round(im.height*m);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-    const sm=document.createElement('canvas');sm.width=sm.height=32;const q=sm.getContext('2d');q.drawImage(im,0,0,32,32);const dt=q.getImageData(0,0,32,32).data;let tr=false;for(let i=3;i<dt.length;i+=4)if(dt[i]<250){tr=true;break}
-    const url=c.toDataURL('image/png');loadTip(url,()=>{B().tip=url;save();re();$('#tipm').textContent=(tr?'':'Sin fondo transparente: se usará el cuadro completo. ')+(m<1?'Reducida a '+c.width+'×'+c.height+'. ':'')+'Forma cargada'})};im.src=fr.result};fr.readAsDataURL(f)};
+  const gx=$('#grainx');if(gx)gx.onclick=()=>{delete B().grainTip;save();re()};
+  const addImage=(file,kind)=>{if(!file)return;const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{
+    const m=Math.min(1,1080/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*m));c.height=Math.max(1,Math.round(im.height*m));c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    const url=c.toDataURL('image/png');(kind==='tip'?loadTip:loadGrain)(url,()=>{B()[kind==='tip'?'tip':'grainTip']=url;save();re();const msg=$('#'+(kind==='tip'?'tipm':'grainm'));if(msg)msg.textContent=(m<1?'Reducida a '+c.width+'×'+c.height+'. ':'')+(kind==='tip'?'Forma cargada':'Textura cargada')})};im.src=fr.result};fr.readAsDataURL(file)};
+  $('#tipf').onchange=e=>addImage(e.target.files[0],'tip');
+  $('#grainf').onchange=e=>addImage(e.target.files[0],'grain');
+  $('#bpro').onclick=()=>{const ref={...B(),n:'Brush Pen · Filmframe',g:'Mis pinceles',size:38,op:100,hard:92,sp:5,grain:0,scat:0,ps:1,po:1,poAmt:47,jz:0,jo:0,jr:0,js:0};delete ref.grainTip;
+    const oval=document.createElement('canvas');oval.width=oval.height=128;const og=oval.getContext('2d');og.fillStyle='#000';og.beginPath();og.ellipse(64,64,57,61,0,0,Math.PI*2);og.fill();ref.tip=oval.toDataURL('image/png');
+    S.brushes.push(ref);S.bi=S.brushes.length-1;gSel='Mis pinceles';loadTip(ref.tip,()=>{});save();re();toast('Perfil Brush Pen creado con una punta ovalada aproximada y parámetros interpretados del archivo de referencia')};
 }
-S.brushes.forEach(b=>b.tip&&loadTip(b.tip));
+S.brushes.forEach(b=>{if(b.tip)loadTip(b.tip);if(b.grainTip)loadGrain(b.grainTip)});
 const dirty=new Set();let pt;
 const DB={db:null,
   open(){return new Promise(r=>{try{const q=indexedDB.open(STORE.frames,1);q.onupgradeneeded=()=>q.result.createObjectStore('f');q.onsuccess=()=>{DB.db=q.result;r(1)};q.onerror=()=>r(0)}catch(e){r(0)}})},
-  put(k,v){if(!DB.db)return;try{DB.db.transaction('f','readwrite').objectStore('f').put(v,k)}catch(e){}},
+  put(k,v){return new Promise(r=>{if(!DB.db)return r(false);try{const tx=DB.db.transaction('f','readwrite');tx.objectStore('f').put(v,k);tx.oncomplete=()=>r(true);tx.onerror=tx.onabort=()=>r(false)}catch(e){r(false)}})},
   putCell(id,b,v){return new Promise(r=>{if(!DB.db)return r(false);try{const x=DB.db.transaction('f','readwrite'),s=x.objectStore('f');s.put(b,'c'+id);if(v!=null)s.put(v,'cv'+id);x.oncomplete=()=>r(true);x.onerror=x.onabort=()=>r(false)}catch(e){r(false)}})},
   get(k){return new Promise(r=>{if(!DB.db)return r(null);try{const q=DB.db.transaction('f').objectStore('f').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)}catch(e){r(null)}})}};
 function toast(t){let e=$('#toast');if(!e){e=document.createElement('div');e.id='toast';e.style.cssText='position:absolute;left:50%;top:14px;transform:translateX(-50%);background:var(--accent);color:var(--on);padding:10px 14px;border-radius:14px;font-size:13px;max-width:90%;z-index:5';document.body.appendChild(e)}
@@ -489,7 +609,7 @@ $('#ov').addEventListener('click',e=>{if(e.target.id==='ov')e.target.classList.r
 
 
 </script>
-<script>
+<script data-ff-module="animation-core" data-ff-order="01">
 // ===== FASE 1: capas, timeline con holds por capa, exportación =====
 let me=0,GP={},GA=null,CID=0,L=[],al=0,sel={a:0,b:0},rm=0,newCell=0,dg=null;
 const nl=n=>({n,v:1,k:0,o:100,a:[]}),T=()=>Math.max(1,...L.map(l=>l.a.length)),esc=s=>String(s).replace(/[<&>"]/g,c=>'&#'+c.charCodeAt(0)+';');
@@ -561,11 +681,29 @@ function setSize(w,h){const mp=new Map(),old=L;W=S.w=w;H=S.h=h;view.width=W;view
   L=old.length?old.map(l=>({...l,a:l.a.map(c=>{if(!c)return null;if(!mp.has(c)){const n=mk();n.getContext('2d').drawImage(c,0,0,W,H);if(c.m){n.m=mk();n.m.getContext('2d').drawImage(c.m,0,0,W,H)}mp.set(c,n)}return mp.get(c)})})):[nl('Capa 1')];
   hist=[];save();render();buildStrip()}
 function dirtyAll(){L.forEach(l=>l.a.forEach(c=>c&&dirty.add(c)))}
-let _mbk=0;
-function persist(){clearTimeout(pt);pt=setTimeout(persistNow,700)}
-async function persistNow(){clearTimeout(pt);pt=0;if(!_mbk){_mbk=1;try{const o=await DB.get('meta');if(o)DB.put('meta-bak',o)}catch(e){}}
-  {DB.put('meta',{v:2,w:W,h:H,cur,al,gp:GP,L:L.map(l=>({n:l.n,v:l.v,k:l.k,o:l.o,bm:l.bm,br:l.br,ref:l.ref,alk:l.alk,cl:l.cl,gid:l.gid,ms:l.a.map(c=>c&&c.m?c.m._id:0),a:l.a.map(c=>c?c._id:0)}))});
-  [...dirty].forEach(c=>{dirty.delete(c);c.toBlob(b=>{if(b){const v=c._v;DB.putCell(c._id,b,v).then(ok=>{if(ok&&c._v===v)c._sv=v})}})})}}
+let _mbk=0,_persistChain=Promise.resolve();
+function persist(){clearTimeout(pt);pt=setTimeout(()=>persistNow(),700)}
+function persistNow(){clearTimeout(pt);pt=0;
+  _persistChain=_persistChain.then(async()=>{
+    if(!DB.db)throw new Error('La base de datos no está disponible');
+    const pending=[...dirty],writes=[];
+    for(const c of pending){
+      const version=c._v;
+      const blob=await new Promise(resolve=>{try{c.toBlob(resolve)}catch(e){resolve(null)}});
+      if(!blob)throw new Error('No se pudo preparar un fotograma para guardar');
+      const ok=await DB.putCell(c._id,blob,version);
+      if(!ok)throw new Error('IndexedDB rechazó la escritura de un fotograma');
+      writes.push([c,version]);
+    }
+    const meta={v:2,w:W,h:H,cur,al,gp:GP,L:L.map(l=>({n:l.n,v:l.v,k:l.k,o:l.o,bm:l.bm,br:l.br,ref:l.ref,alk:l.alk,cl:l.cl,gid:l.gid,ms:l.a.map(c=>c&&c.m?c.m._id:0),a:l.a.map(c=>c?c._id:0)}))};
+    if(!_mbk){const previous=await DB.get('meta');if(previous){const backed=await DB.put('meta-bak',previous);if(!backed)throw new Error('No se pudo crear la copia de seguridad previa')}_mbk=1}
+    const saved=await DB.put('meta',meta);
+    if(!saved)throw new Error('No se pudo confirmar el índice del proyecto');
+    for(const [c,version] of writes){if(c._v===version){c._sv=version;dirty.delete(c)}}
+    return true;
+  }).catch(e=>{toast('⚠ Guardado incompleto: '+(e&&e.message?e.message:'error de almacenamiento'));return false});
+  return _persistChain;
+}
 function memCheck(){const s=new Set();L.forEach(l=>l.a.forEach(c=>c&&s.add(c)));const mb=W*H*4/1048576*s.size;
   if(mb>S.memWarn){if(!warned){warned=true;toast('Proyecto grande: unos '+(mb/1024).toFixed(1)+' GB en memoria.')}}else warned=false}
 // ----- Exportación -----
@@ -612,7 +750,7 @@ const XP={gif:xGif,png:xPng};/* mp4 se asigna más abajo: XP.mp4=xVid */
   setSize(W,H)})();
 
 </script>
-<script>
+<script data-ff-module="tools-projects" data-ff-order="02">
 // ===== FASE 2: audio, relleno, selección, proyectos =====
 Object.assign(IC,{fil:'m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11ZM5 2l5 5M2 13h15M22 20a2 2 0 1 1-4 0c0-1.1 2-4 2-4s2 2.9 2 4Z',sel:'M5 3a2 2 0 0 0-2 2M19 3a2 2 0 0 1 2 2M21 19a2 2 0 0 1-2 2M5 21a2 2 0 0 1-2-2M9 3h1M9 21h1M14 3h1M14 21h1M3 9v1M21 9v1M3 14v1M21 14v1'});
 Object.assign(NAMES,{fil:'Relleno',sel:'Selección'});
@@ -704,7 +842,7 @@ $('#prj').onclick=prjSheet;
 rail();
 
 </script>
-<script>
+<script data-ff-module="playback-cache" data-ff-order="03">
 // ===== FASE 3: mezcla, estabilizador, caché de vista previa en disco, UX =====
 let sm=null,lastRaw=null,prevTool=null,VC=Date.now(),cbusy=0;
 const CK=new Set(),PB=new Map(),PL=new Set();
@@ -740,7 +878,7 @@ const CD={db:null,ready:new Promise(ok=>{try{const q=indexedDB.open(STORE.cache,
 const cdb=(m,f)=>new Promise((ok,no)=>{const t=CD.db.transaction('c',m),r=f(t.objectStore('c'));t.oncomplete=()=>ok(r&&r.result);t.onerror=()=>no(t.error);t.onabort=()=>no(t.error)});
 const h53=s=>{let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}
   a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
-const pvs=()=>Math.min(1,1280/Math.max(W,H));const CVER='|cache2';
+const pvs=()=>Math.min(1,854/Math.max(W,H));const CVER='|cache3-480p-webp';
 function fkey(t){return h53(L.map(l=>{const c=l.v&&l.a[t];return c?c._id+'.'+(c._v||0)+'.'+l.o+'.'+(l.bm||'n')+(l.br&&l.br!==100?'b'+l.br:'')+'.'+(c.m?c.m._v||0:'')+(l.cl?'c':'')+(l.alk?'a':'')+(l.gid?l.gid+JSON.stringify(GP[l.gid]):''):''}).join('|')+S.paper+W+H+CVER)}
 const allCached=()=>{for(let t=0;t<T();t++)if(!CK.has(fkey(t)))return false;return true};
 const _th=thumb;thumb=function(t){_th(t);const h=strip.querySelector('[data-h="'+t+'"]');if(h)h.classList.toggle('cc',CK.has(fkey(t)))};
@@ -766,16 +904,49 @@ function startPlay(btn){playing=true;btn.classList.add('on');closeFly();const n=
   aPlay(cur);prefetch(pk,cur,n);
   timer=setInterval(()=>{const c=(c0+Math.floor((performance.now()-t0)*S.fps/1000))%n;if(c===lp)return;if(c<lp){t0=performance.now();c0=0;aPlay(0)}cur=lp=c;drawF(pk,c);lite(c);prefetch(pk,c,n)},1000/S.fps/3)}
 function stopPlay(){playing=false;$('#play').classList.remove('on');clearInterval(timer);aStop();PB.forEach(b=>b.close());PB.clear();render();mark()}
-$('#play').onclick=async e=>{if(playing)return stopPlay();if(cbusy){cbusy=2;return}const btn=e.currentTarget;
-  if(S.pvc!==0&&!allCached()){btn.classList.add('on');const ok=await buildCache((i,n)=>$('#cnt').textContent='Caché '+i+' / '+n);btn.classList.remove('on');thumbsAll();render();if(!ok)return}
+$('#play').onclick=async e=>{if(playing)return stopPlay();if(cbusy){toast('La caché manual está en proceso; puedes cancelarla desde Precalcular.');return}const btn=e.currentTarget;
   startPlay(btn)};
 $('#pcb').onclick=async()=>{if(cbusy){cbusy=2;return}const ok=await buildCache((i,n)=>$('#mb').textContent='Caché '+i+' / '+n);thumbsAll();memBadge();toast(ok?'Caché lista':'Caché cancelada')};
+
+// ----- precálculo progresivo: una previsualización por tarea, sin bloquear la reproducción -----
+const PVQ=[];let PVSet=new Set(),PVBusy=0,PVT=0;
+function queuePreview(center=cur,all=false){
+  if(S.pvc===0||!CD.db||!L.length)return;
+  const n=T(),order=[];
+  // Prioridad: fotograma actual, próximos, anteriores y después el resto.
+  order.push(Math.max(0,Math.min(n-1,center)));
+  for(let d=1;d<=Math.min(8,n);d++){if(center+d<n)order.push(center+d);if(center-d>=0)order.push(center-d)}
+  if(all)for(let t=0;t<n;t++)order.push(t);
+  const seen=new Set();
+  for(const t of order){if(seen.has(t))continue;seen.add(t);const k=fkey(t);if(CK.has(k)||PVSet.has(k))continue;PVSet.add(k);PVQ.push([t,k])}
+  if(!PVT)PVT=setTimeout(runPreviewJob,180);
+}
+async function runPreviewJob(){PVT=0;if(PVBusy||!PVQ.length)return;
+  if(playing||drawing||cbusy){PVT=setTimeout(runPreviewJob,350);return}
+  await CD.ready;if(!CD.db){PVQ.length=0;PVSet.clear();return}
+  const item=PVQ.shift();if(!item)return;const[t,k]=item;PVBusy=1;
+  try{
+    // La clave puede haber cambiado mientras esperaba en cola; nunca guardar una imagen obsoleta.
+    if(k!==fkey(t)||CK.has(k))return;
+    const sc=pvs(),w=Math.max(1,Math.round(W*sc)),h=Math.max(1,Math.round(H*sc));
+    const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d',{alpha:false});
+    g.fillStyle=S.paper;g.fillRect(0,0,w,h);comp(t,g);
+    let blob=await new Promise(resolve=>c.toBlob(resolve,'image/webp',.82));
+    if(!blob||!blob.size)blob=await new Promise(resolve=>c.toBlob(resolve,'image/jpeg',.84));
+    c.width=1;c.height=1;
+    if(blob&&k===fkey(t)){await cdb('readwrite',store=>store.put(blob,k));CK.add(k);const h=strip.querySelector('[data-h="'+t+'"]');if(h)h.classList.add('cc')}
+  }catch(e){/* Fallo de caché no debe interrumpir el dibujo ni la reproducción. */}
+  finally{PVBusy=0;PVSet.delete(k);if(PVQ.length&&!PVT)PVT=setTimeout(runPreviewJob,playing||drawing?350:25)}
+}
+const _goPV=go;go=function(i){_goPV(i);queuePreview(cur,true)};
+const _markPV=mark;mark=function(){_markPV();if(!playing)queuePreview(cur,false)};
+addEventListener('visibilitychange',()=>{if(!document.hidden&&PVQ.length&&!PVT)PVT=setTimeout(runPreviewJob,100)});
 // ----- memoria -----
 const _mc=memCheck;memCheck=function(){_mc();while(hist.length>1&&hist.length*W*H*4>3e8)hist.shift();memBadge()};
 rail();
 
 </script>
-<script>
+<script data-ff-module="audio-video" data-ff-order="04">
 // ===== FASE 4: audio en el video, rotoscopio, audio flexible =====
 async function addAudio(blob,n,off=0,m=0,x={}){const ac=AC||(AC=new(window.AudioContext||window.webkitAudioContext)());let buf;
   try{buf=await ac.decodeAudioData(await blob.arrayBuffer())}catch(e){return toast('No se pudo leer ese audio')}
@@ -843,7 +1014,7 @@ async function roto(f){if(playing)$('#play').click();const v=document.createElem
     $('#ov').classList.remove('show');buildStrip();render();toast('Rotoscopio importado en una capa de referencia (bloqueada, no se exporta)')}}
 
 </script>
-<script>
+<script data-ff-module="drawing-advanced" data-ff-order="05">
 // ===== VERSIÓN 1.1: pincel, capas tipo Procreate, color, transformación =====
 let cq=null,ctl=null,PR=null,VF=1,vl=null,TF=null,EYD=null,lpT=null,lpS=null,LC=null,prevT=null;
 Object.assign(BM,{dk:'darken',lt:'lighten',cd:'color-dodge',cb:'color-burn',sl:'soft-light',hl:'hard-light',df:'difference',ad:'lighter',co:'color'});
@@ -1010,7 +1181,7 @@ addEventListener('keydown',e=>{if(!TF)return;if(e.key==='Enter'){e.preventDefaul
 rail();
 
 </script>
-<script>
+<script data-ff-module="advanced-tools" data-ff-order="06">
 // ===== VERSIÓN 1.2 =====
 let SP=[],BB=null,LE=null,qsT=null,TP=null,SYN=0,CAP=null,lastPen=0,ERT=null,GS0=null,GSR=1,gdD=null,tlT=null,thT=null;
 const redoS=[],THC=new Map(),TLR={on:0,f:[]},sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1204,7 +1375,7 @@ const _mc7=memCheck;memCheck=function(){_mc7();if(S.evn===undefined&&allCells().
 rail();
 
 </script>
-<script>
+<script data-ff-module="timeline-dock" data-ff-order="07">
 // ===== 1.1.7: dock de timeline, pestaña de opciones, playhead, brillo =====
 (()=>{const tl=$('#tl'),dr=$('#ldrawer'),ar=$('#tla'),br=$('#lbr');
   const drawer=on=>{dr.classList.toggle('show',!!on);ar.classList.toggle('on',!!on);ar.setAttribute('aria-expanded',!!on)};
@@ -1242,7 +1413,7 @@ rail();
   mark();
 })();
 </script>
-<script>
+<script data-ff-module="updater" data-ff-order="08">
 // ===== Avisos de actualización (GitHub Releases) =====
 const UPD={manifest:'https://raw.githubusercontent.com/manceraarts-lang/FILMFRAME/main/version.json',every:864e5,k:{last:'upd-last',skip:'upd-skip'}};
 const verCmp=(a,b)=>{const x=String(a).replace(/^v/i,'').split('.').map(n=>parseInt(n)||0),y=String(b).replace(/^v/i,'').split('.').map(n=>parseInt(n)||0);
@@ -1279,5 +1450,25 @@ function updDialog(v,notes,url){
 }
 window.addEventListener('load',()=>setTimeout(checkUpdate,3000));
 </script>
+
+<script data-ff-module="timeline-zoom" data-ff-order="09">
+// ===== 1.1.15: zoom horizontal de Timeline y selección rápida de rango =====
+(()=>{
+  const bar=document.getElementById('tlzoom'),slider=document.getElementById('tlz'),readout=document.getElementById('tlzv');
+  if(!bar||!slider||!readout)return;
+  let cell=44;
+  try{const saved=Number(localStorage.getItem('filmframe_tl_zoom_1115'));if(Number.isFinite(saved)&&saved>=32&&saved<=76)cell=saved}catch(e){}
+  const apply=value=>{cell=Math.max(32,Math.min(76,Math.round(value/2)*2));slider.value=String(cell);strip.style.setProperty('--tl-cell',cell+'px');readout.value=Math.round(cell/44*100)+'%';readout.textContent=Math.round(cell/44*100)+'%';try{localStorage.setItem('filmframe_tl_zoom_1115',String(cell))}catch(e){}};
+  slider.addEventListener('input',()=>apply(+slider.value));
+  document.getElementById('tlzout').addEventListener('click',()=>apply(cell-4));
+  document.getElementById('tlzin').addEventListener('click',()=>apply(cell+4));
+  // Ctrl/Meta + rueda sobre Timeline ajusta el zoom; la rueda normal conserva el desplazamiento.
+  strip.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();apply(cell+(e.deltaY<0?4:-4))},{passive:false});
+  // Shift + toque/clic en un encabezado selecciona desde el fotograma actual hasta el destino.
+  strip.addEventListener('click',e=>{const h=e.target.closest('.hd');if(!h||!e.shiftKey)return;const target=Number(h.dataset.h);if(!Number.isInteger(target))return;e.preventDefault();e.stopImmediatePropagation();sel={a:Math.min(cur,target),b:Math.max(cur,target)};go(target);mark();const tools=document.getElementById('tools');if(tools)tools.classList.add('visible')},true);
+  apply(cell);
+})();
+</script>
 </body>
 </html>
+
