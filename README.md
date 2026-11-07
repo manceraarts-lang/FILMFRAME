@@ -1,6 +1,6 @@
 # 🎬 Filmframe 2D Animation
 
-> Software de estudio de animación 2D en un solo archivo HTML.
+> Software de animación 2D en archivo HTML. Pinceles con presión, timeline con holds redimensionables, capas con máscaras, rotoscopia y exportación a GIF/MP4/PSD. Sin instalación, sin servidor, 100% free use.
 
 ![versión](https://img.shields.io/badge/versión-1.1.21-orange)
 ![licencia](https://img.shields.io/badge/licencia-MIT-blue)
